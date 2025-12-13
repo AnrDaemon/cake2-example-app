@@ -1,5 +1,6 @@
 # User specific & automatically generated files #
 #################################################
+/bin/
 /app/Config/core.php
 /app/Config/database.php
 /app/tmp
