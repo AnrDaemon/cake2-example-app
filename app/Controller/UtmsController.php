@@ -5,7 +5,7 @@
  */
 class UtmsController extends AppController {
     public $helpers = array('Html', 'Form');
-    public $components = array('RequestHandler');
+    public $components = array('RequestHandler', 'Paginator');
 
     private function _validate($data) {
         if ((isset($data["data_content"]) || isset($data["content"])) && (strtoupper($data["data_content"]) === "NULL" || strtoupper($data["content"]) === "NULL")) {
@@ -19,11 +19,25 @@ class UtmsController extends AppController {
     }
 
     public function index() {
-        $this->set('utms', $this->Utm->find('all'));
+        $this->Paginator->settings = array(
+            'limit' => 20,
+            'order' => array('Utm.id' => 'desc'),
+            'paramType' => 'querystring'
+        );
+
+        $utms = $this->Paginator->paginate('Utm');
+        $this->set(compact('utms'));
     }
 
     public function list() {
-        $this->set('utms', $this->Utm->find('all'));
+        $this->Paginator->settings = array(
+            'limit' => 20,
+            'order' => array('Utm.id' => 'desc'),
+            'paramType' => 'querystring'
+        );
+
+        $utms = $this->Paginator->paginate('Utm');
+        $this->set(compact('utms'));
     }
 
     public function add() {
