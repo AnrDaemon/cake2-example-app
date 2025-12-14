@@ -44,7 +44,7 @@
 		],
 		"runserver": [
 			"Composer\\Config::disableProcessTimeout",
-			"php -S localhost:8080 -t app/webroot app/webroot/index.php"
+			"php -dsession.save_path=app/tmp/sessions -S localhost:8080 -t app/webroot app/webroot/index.php"
 		],
 		"cs-check": "./vendors/bin/phpcs -p --extensions=php --standard=CakePHP ./lib/Cake",
 		"test": "./lib/Cake/Console/cake test core AllTests --stderr --verbose"
