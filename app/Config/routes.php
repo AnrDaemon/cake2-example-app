@@ -32,6 +32,11 @@
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
 /**
+ * UTM's controller statistics
+ */
+Router::connect('/statistics/utm/list', array('controller' => 'utms', 'action' => 'list'));
+
+/**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.
  */
