@@ -5,7 +5,7 @@
  */
 class UtmsController extends AppController {
     public $helpers = array('Html', 'Form');
-    public $components = array('RequestHandler', 'Paginator');
+    public $components = array('RequestHandler', 'Paginator', 'Flash');
 
     private function _validate($data) {
         if ((isset($data["data_content"]) || isset($data["content"])) && (strtoupper($data["data_content"]) === "NULL" || strtoupper($data["content"]) === "NULL")) {
@@ -38,6 +38,10 @@ class UtmsController extends AppController {
 
         $utms = $this->Paginator->paginate('Utm');
         $this->set(compact('utms'));
+
+        if ($this->Paginator->error) {
+            $this->Flash->error(__('Pagination error'));
+        }
     }
 
     public function add() {
@@ -45,10 +49,10 @@ class UtmsController extends AppController {
             $this->Utm->create();
             $data = $this->_validate($this->request->data);
             if ($this->Utm->save($data)) {
-                $this->Session->setFlash('UTM успешно добавлен');
+                $this->Flash->success(__('UTM added successfully'));
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Ошибка при сохранении');
+                $this->Flash->error(__('Error saving entity'));
             }
         }
     }
@@ -56,33 +60,19 @@ class UtmsController extends AppController {
     public function edit($id = null) {
         $utm = $this->Utm->findById($id);
         if (!$utm) {
-            throw new NotFoundException(__('UTM не найден'));
+            throw new NotFoundException(__('UTM not found'));
         }
         if ($this->request->is(array('post', 'put'))) {
             $data = $this->_validate($this->request->data);
             if ($this->Utm->save($data)) {
-                $this->Session->setFlash('UTM успешно обновлен');
+                $this->Flash->success(__('UTM updated successfully'));
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Ошибка при обновлении');
+                $this->Flash->error(__('Error updating entity'));
             }
         }
         if (!$this->request->data) {
             $this->request->data = $utm;
         }
-    }
-
-    public function statistics() {
-        $data = $this->Utm->find('all', array(
-            'fields' => array(
-                'source',
-                'medium',
-                'campaign',
-                'content',
-                'COUNT(*) as total'
-            ),
-            'group' => array('source', 'medium', 'campaign', 'content')
-        ));
-        $this->set(compact('data'));
     }
 }
